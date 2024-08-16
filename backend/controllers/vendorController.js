@@ -1,6 +1,12 @@
 import Vendor from "../models/Vendor.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv"
+
+dotenv.config()
+
+const secretKey = process.env.SECRETKEY
+
 
 export const vendorRegister = async (req, res) => {
     const { username, email, password } = req.body;
@@ -40,7 +46,10 @@ export const vendorLogin = async(req, res)=>{
         if(!vendor || !(await bcrypt.compare(password, vendor.password))){
             return res.status(401).json({message: "Invalid email or password"})
         }
-        res.status(200).json({success: "Login Successfully"})
+
+        const token = jwt.sign({vendorId: vendor._id}, secretKey, { expiresIn: "1h" })
+
+        res.status(200).json({success: "Login Successfully", token})
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Login Unsucessfull" });
