@@ -4,6 +4,7 @@ import mongoose from "mongoose"
 import bodyParser from "body-parser"
 import vendorRoutes from "./routes/vendorRoutes.js"
 import firmRoutes from "./routes/firmRoutes.js"
+import productRoutes from "./routes/productRoutes.js"
 
 const app = express()
 
@@ -27,6 +28,7 @@ app.use('/home', (req, res)=>{
 app.use(bodyParser.json())
 app.use('/vendor', vendorRoutes)
 app.use('/firm', firmRoutes)
+app.use('/product', productRoutes)
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`)

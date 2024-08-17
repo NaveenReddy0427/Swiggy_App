@@ -6,5 +6,10 @@ const firmRoutes = express.Router()
 
 firmRoutes.post('/add-firm', verifyToken, upload.single('image'), firmController)
 
+firmRoutes.get('/uploads/:imageName', (req, res) => {
+    const imageName = req.params.imageName;
+    res.header('Content-Type', 'image/jpeg');
+    res.sendFile(path.join(__dirname, '..', 'uploads', imageName));
+});
 
 export default firmRoutes;
