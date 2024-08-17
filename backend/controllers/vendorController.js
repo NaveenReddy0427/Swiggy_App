@@ -7,7 +7,6 @@ dotenv.config()
 
 const secretKey = process.env.SECRETKEY
 
-
 export const vendorRegister = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -53,6 +52,15 @@ export const vendorLogin = async(req, res)=>{
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Login Unsucessfull" });
+    }
+}
+
+export const getAllVendors = async(req, res)=>{
+    try {
+        const vendors = await Vendor.find().populate('firm')
+        res.json({vendors})
+    } catch (error) {
+        res.status(500).json({error: "Internal server error"})
     }
 }
 
