@@ -13,8 +13,14 @@ const vendorSchema = mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    firm: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Firm'
+    }]
 })
 
 const Vendor = mongoose.model("Vendor", vendorSchema)
+
+
 export default Vendor;
