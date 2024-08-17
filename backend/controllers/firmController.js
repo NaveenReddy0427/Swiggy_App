@@ -38,4 +38,19 @@ const firmController = async(req, res)=>{
     }
 }
 
-export { firmController, upload };
+const deleteFirmById = async(req, res) => {
+    try {
+        const firmId = req.params.firmId;
+
+        const deletedProduct = await Firm.findByIdAndDelete(firmId);
+
+        if (!deletedProduct) {
+            return res.status(404).json({ error: "No product found" })
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" })
+    }
+}
+
+export { firmController, deleteFirmById, upload };
