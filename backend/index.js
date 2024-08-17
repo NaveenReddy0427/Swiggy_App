@@ -21,11 +21,6 @@ mongoose.connect(process.env.MONGO_URI)
 })
 
 
-app.use('/', (req, res)=>{
-    res.send('<h1>welcome to the swiggy app</h1>')
-})
-
-
 app.use(bodyParser.json())
 app.use('/vendor', vendorRoutes)
 app.use('/firm', firmRoutes)
@@ -34,4 +29,8 @@ app.use('/uploads', express.static('uploads'))
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`)
+})
+
+app.use('/', (req, res) => {
+    res.send("<h1> Welcome to swiggy");
 })
