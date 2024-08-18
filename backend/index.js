@@ -5,13 +5,15 @@ import bodyParser from "body-parser"
 import vendorRoutes from "./routes/vendorRoutes.js"
 import firmRoutes from "./routes/firmRoutes.js"
 import productRoutes from "./routes/productRoutes.js"
-import path from "path"
+import cors from "cors"
 
 const app = express()
 
 const PORT = process.env.PORT || 4001
 
 dotenv.config()
+app.use(cors())
+
 
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{
