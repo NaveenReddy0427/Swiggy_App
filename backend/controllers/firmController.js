@@ -1,6 +1,7 @@
 import Vendor from "../models/Vendor.js"
 import Firm from "../models/Firm.js"
 import multer from "multer"
+import path from "path"
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -13,28 +14,42 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const firmController = async(req, res)=>{
+const addFirm = async(req, res)=>{
     try {
-        const {firmName, area, category, region, offer} = req.body
-        const image = req.file? req.file.filename: undefined;
+        const { firmName, area, category, region, offer } = req.body;
 
-        const vendor = await Vendor.findById(req.vendorId)
-        if(!vendor){
-            return res.status(404).json({message: "Vendor not found"})
+        const image = req.file ? req.file.filename : undefined;
+
+        const vendor = await Vendor.findById(req.vendorId);
+        if (!vendor) {
+            res.status(404).json({ message: "Vendor not found" })
+        }
+
+        if (vendor.firm.length > 0) {
+            return res.status(400).json({ message: "vendor can have only one firm" });
         }
 
         const firm = new Firm({
-            firmName, area, category, region, offer, image, vendor: vendor._id
+            firmName,
+            area,
+            category,
+            region,
+            offer,
+            image,
+            vendor: vendor._id
         })
 
-        const savedFirm = await firm.save()
+        const savedFirm = await firm.save();
+
+        const firmId = savedFirm._id
+        const vendorFirmName = savedFirm.firmName
+
         vendor.firm.push(savedFirm)
         await vendor.save()
-
-        return res.status(200).json({message: "Firm created successfully"})
+        return res.status(200).json({ message: 'Firm Added successfully ', firmId, vendorFirmName });
     } catch (error) {
         console.error(error)
-        return res.status(500).json({message: "Internal Server Error"})
+        res.status(500).json("intenal server error")
     }
 }
 
@@ -53,4 +68,4 @@ const deleteFirmById = async(req, res) => {
     }
 }
 
-export { firmController, deleteFirmById, upload };
+export { addFirm, deleteFirmById, upload };
